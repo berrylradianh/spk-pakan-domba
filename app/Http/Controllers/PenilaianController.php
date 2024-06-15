@@ -149,6 +149,50 @@ class PenilaianController extends Controller
         }
     }
 
+
+    public function user()
+    {
+        $penilaians = Penilaian::all();
+
+        if ($penilaians->count() > 1) {
+            $pakans = Pakan::all();
+            $kriterias = Kriteria::with('bobots')->get();
+            return view('moduls.user.penilaian', compact('penilaians', 'pakans', 'kriterias'));
+        } else {
+            $pakans = Pakan::all();
+            $kriterias = Kriteria::with('bobots')->get();
+            return view('moduls.user.penilaian', compact('penilaians', 'pakans', 'kriterias'));
+        }
+    }
+
+    public function generateRanking(Request $request)
+    {
+        $selectedPenilaianIds = $request->input('selected_penilaians', []);
+        $penilaians = Penilaian::whereIn('id', $selectedPenilaianIds)->get();
+
+        if ($penilaians->count() > 1) {
+            $alternatives = $this->generateAlternatives($penilaians);
+            $normalizedMatrix = $this->normalizeMatrix($alternatives);
+            $weightedNormalizedMatrix = $this->weightedNormalizedMatrix($normalizedMatrix, $this->weightCriteria);
+
+            list($idealPositive, $idealNegative) = $this->idealSolutions($weightedNormalizedMatrix);
+
+            list($distancesPositive, $distancesNegative) = $this->calculateDistances($weightedNormalizedMatrix, $idealPositive, $idealNegative);
+
+            $preferenceValues = $this->preferenceValues($distancesPositive, $distancesNegative);
+            $rankAlternatives = $this->rankAlternatives($preferenceValues);
+
+            $pakans = Pakan::all();
+            $kriterias = Kriteria::with('bobots')->get();
+            return view('moduls.user.ranking', compact('penilaians', 'pakans', 'kriterias', 'alternatives', 'normalizedMatrix', 'weightedNormalizedMatrix', 'idealPositive', 'idealNegative', 'distancesPositive', 'distancesNegative', 'preferenceValues', 'rankAlternatives'));
+        } else {
+            $pakans = Pakan::all();
+            $kriterias = Kriteria::with('bobots')->get();
+            return view('moduls.user.ranking', compact('penilaians', 'pakans', 'kriterias'));
+        }
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */

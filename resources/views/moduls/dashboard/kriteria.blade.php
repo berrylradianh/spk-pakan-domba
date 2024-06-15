@@ -13,12 +13,13 @@
         <div class="sm:px-6 w-full">
             <div class="px-4 py-4 md:pt-12 md:pb-7 -mb-8">
                 <div class="flex items-start gap-2 w-full">
-                    <i class='bx bxs-purchase-tag-alt text-5xl mt-1 text-primary'></i>
+                    <i class='bx bxs-purchase-tag-alt text-5xl text-primary'></i>
                     <div class="flex flex-col gap-1">
-                        <p tabindex="0" class="focus:outline-none text-base sm:text-lg md:text-2xl lg:text-3xl font-bold leading-normal text-gray-800">
+                        <p tabindex="0" class="focus:outline-none text-base sm:text-lg md:text-2xl lg:text-3xl font-bold leading-normal text-gray-800 mt-1">
                             KRITERIA</p>
-                        <p class="text-gray-400 max-w-2xl">Kriteria
-                            Menilai kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik pakan untuk optimalkan pemeliharaan domba.</p>
+                            <p class="text-gray-400 max-w-2xl">&nbsp;</p>
+                        <!-- <p class="text-gray-400 max-w-2xl">Kriteria
+                            Menilai kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik pakan untuk optimalkan pemeliharaan domba.</p> -->
                         <div class="sm:flex items-center justify-start gap-2">
                             <button onclick="toggleModal('modal-id')" type="button" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-1 bg-primary hover:bg-primary focus:outline-none rounded">
                                 <p class=" font-semibold leading-none text-white flex items-center gap-1"><i class='bx bx-plus text-lg'></i><span>Tambah Kriteria</span></p>

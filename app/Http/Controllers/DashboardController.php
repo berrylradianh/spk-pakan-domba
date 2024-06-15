@@ -32,7 +32,9 @@ class DashboardController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Authentication successful
-            toast('Anda berhasil login ke dashboard rekapitulasi!', 'success');
+            $user = Auth::user();
+            $role = $user->role_id == 1 ? 'admin' : 'user';
+            toast('Selamat datang, ' . $user->name . '! Anda berhasil login sebagai ' . ucfirst($role) . '.', 'success');
             return redirect()->route('dashboard');
         }
 

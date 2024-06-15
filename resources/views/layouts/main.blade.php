@@ -9,7 +9,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     @vite('resources/css/app.css')
 
-    @if ($title === 'Dashboard')
+    @if ($title === 'Dashboard' || $title === 'Login')
     <link rel="stylesheet" href="{{ asset('assets/css/dataTables.tailwindcss.min.css') }}">
     @endif
     @if ($title === 'Login')
@@ -24,7 +24,7 @@
     </style>
     @endif
 
-    @if ($title === 'Dashboard')
+    @if ($title === 'Dashboard' || $title === 'Login')
     <style>
         .box {
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -40,7 +40,7 @@
         @yield('content')
     </main>
 
-    @if ($title === 'Dashboard')
+    @if ($title === 'Dashboard' || $title === 'Login')
     <script src="{{ asset('assets/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
     <script>
@@ -48,7 +48,6 @@
         new DataTable('#example');
     </script>
     @endif
-
 
 </body>
 

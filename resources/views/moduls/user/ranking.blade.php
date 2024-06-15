@@ -1,66 +1,90 @@
 @extends('layouts.main', [
-'title' => 'Dashboard',
-'active' => 'Penilaian'
+'title' => 'Login',
+'active' => 'Login'
 ])
 
 @section('content')
-<section class="flex w-full">
-    @include('moduls.dashboard.layouts.sidebar', ['active' => 'Penilaian', 'data' => sizeof($penilaians)])
-    <div class="flex flex-col w-full">
-        <div class="sm:px-6 w-full max-w-6xl">
+<script>
+    window.onload = function() {
+        if (performance.navigation.type === 1) {
+            window.location.href = '/penilaian/user';
+        }
+    };
+</script>
+<section class="w-full mx-auto flex md:flex-row flex-col items-center justify-center h-full body relative">
+    <div class="w-full px-16 py-5 top-0 fixed bg-white h-fit flex justify-between items-center z-50">
+        <div class="flex gap-2 items-center">
+            <img src="{{ asset('assets/images/sheep.png') }}" alt="Sheep Icon" class="w-12 h-12 text-primary tracking-[-2px]">
+            <h2 class="text-left text-2xl text-primary tracking-[-2px] font-bold">Sistem Pendukung Keputusan Metode TOPSIS</h2>
+        </div>
+
+        <a href="{{route('login')}}" class="bg-primary text-white px-5 py-2 rounded-full text-lg font-medium"><i class='bx bxs-user-circle mr-2'></i>Login Sebagai Admin</a>
+    </div>
+
+    <div class="flex flex-col w-full relative h-full top-20 z-10">
+        <div class="sm:px-6 w-full w-full max-w-7xl mx-auto">
             <div class="px-4 py-4 md:pt-12 md:pb-7 -mb-8">
                 <div class="flex items-start gap-2 w-full">
-                    <i class='bx bxs-star text-5xl text-primary'></i>
+                    <i class='bx bxs-star text-5xl text-white'>
+                    </i>
                     <div class="flex flex-col gap-1">
-                        <p tabindex="0" class="focus:outline-none text-base sm:text-lg md:text-2xl lg:text-3xl font-bold leading-normal text-gray-800 mt-2">
+                        <p tabindex="0" class="focus:outline-none text-base sm:text-lg md:text-2xl text-white lg:text-3xl font-bold leading-normal text-gray-800 mt-2">
                             PENILAIAN</p>
                         <p class="text-gray-400 max-w-2xl">&nbsp;</p>
-                        <!-- <p class="text-gray-400 max-w-2xl">Pakan
-                            Memilih pakan berkualitas berdasarkan kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik domba.</p> -->
-                        <div class="sm:flex items-center justify-start gap-2">
-                            <button onclick="toggleModal('modal-id')" type="button" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-1 bg-primary hover:bg-primary focus:outline-none rounded">
-                                <p class=" font-semibold leading-none text-white flex items-center gap-1"><i class='bx bx-plus text-lg'></i><span>Tambah Alternatif</span></p>
-                            </button>
-                            <button onclick="toggleModal2('modal-id2')" type="button" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-1 bg-primary hover:bg-primary focus:outline-none rounded">
-                                <p class=" font-semibold leading-none text-white flex items-center gap-1"><i class='bx bxs-bar-chart-alt-2 text-lg'></i></i><span>Generate Ranking</span></p>
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
 
+            @if(sizeof($penilaians) > 1)
+
+
             <div class="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10 mr-16 w-full max-w-full min-w-full">
+                <div class="w-full flex flex-col gap-3 mb-10">
+                    <div class="flex gap-2 w-full items-center">
+                        <i class='bx bxs-select-multiple text-3xl text-primary'></i>
+                        <h2 class="text-left text-2xl text-primary tracking-[-2px] font-bold">Pilihan Alternatif</h2>
+                    </div>
+
+
+
+                    <div class="sm:flex items-center justify-start gap-2">
+                        <a href="{{route('user')}}" class="focus:ring-2 focus:ring-offset-2 mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-1 bg-primary hover:bg-primary focus:outline-none rounded">
+                            <p class="font-semibold leading-none text-white flex items-center gap-1">
+                                <i class='bx bxs-bar-chart-alt-2 text-lg'></i>
+                                <span>Pilih Alternatif</span>
+                            </p>
+                        </a>
+                    </div>
+                </div>
+
                 <div class="overflow-x-auto w-full min-w-full box bg-white p-8 rounded-lg">
-                    <table id="example" class="display w-full" style="width:100%">
+                    <div class="flex gap-2 w-full mb-3 items-center">
+                        <i class='bx bxs-data text-3xl text-primary'></i>
+                        <h2 class="text-left text-2xl text-primary tracking-[-2px] font-bold">Ranking Alternatif Pakan</h2>
+                    </div>
+                    <table class="display w-full example" style="width:100%">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Kode Alternatif</th>
                                 <th>Jenis Pakan</th>
-                                <th>Action</th>
+                                <th>Nilai</th>
                             </tr>
                         </thead>
                         <tbody>
                             @php
                             $i = 1;
                             @endphp
-                            @foreach ($penilaians as $penilaian)
+                            @foreach ($rankAlternatives as $v => $values)
                             <tr class="data-consume">
                                 <td>{{ $i }}</td>
-                                <td>{{ $penilaian['kode_alternatif'] }}</td>
-                                <td>{{ $penilaian['jenis_pakan'] }}</td>
-                                <td class="flex gap-2">
-                                    <a href="/penilaian/edit/{{ $penilaian['id'] }}" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start p-3 bg-primary hover:bg-primary focus:outline-none rounded"><i class='bx bxs-edit-alt text-white'></i>
-                                    </a>
-                                    <form action="{{ route('penilaian.destroy') }}" method="post">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $penilaian['id'] }}">
-                                        <button type="submit" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start p-3 bg-red-500 hover:bg-red-500 focus:outline-none rounded">
-                                            <i class='bx bxs-trash-alt text-white'></i>
-                                        </button>
-                                    </form>
-
+                                <td>
+                                    @foreach ($penilaians as $penilaian)
+                                    @if ($penilaian['kode_alternatif'] == $v)
+                                    {{ $penilaian['jenis_pakan'] }}
+                                    @endif
+                                    @endforeach
                                 </td>
+                                <td>{{ $values}}</td>
                             </tr>
                             @php
                             $i++;
@@ -70,22 +94,21 @@
                         <tfoot>
                             <tr>
                                 <th>No</th>
-                                <th>Kode Alternatif</th>
                                 <th>Jenis Pakan</th>
-                                <th>Action</th>
+                                <th>Nilai</th>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
 
-            @if(sizeof($penilaians) > 2)
-
             <div class="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10 mr-16 w-full max-w-full min-w-full">
+
+
                 <div class="overflow-x-auto w-full min-w-full box bg-white p-8 rounded-lg">
                     <div class="flex gap-2 w-full mb-3 items-center">
                         <i class='bx bxs-data text-3xl text-primary'></i>
-                        <h2 class="text-left text-2xl text-primary tracking-[-2px] font-bold">Alternatives</h2>
+                        <h2 class="text-left text-2xl text-primary tracking-[-2px] font-bold">Bobot Kriteria Alternatives</h2>
                     </div>
                     <table class="display w-full example" style="width:100%">
                         <thead>
@@ -471,158 +494,6 @@
     </div>
 </section>
 
-<div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal-id">
-    <div class="relative w-auto my-6 mx-auto max-w-3xl">
-        <!--content-->
-        <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-            <!--header-->
-            <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                <h3 class="text-2xl font-semibold">
-                    Tambah Alternatif
-                </h3>
-                <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onclick="toggleModal('modal-id')">
-                    <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                        ×
-                    </span>
-                </button>
-            </div>
-            <!--body-->
-            <div class="relative p-6 flex-auto">
-                <form action="{{ route('penilaian.store') }}" class="flex flex-col w-full gap-1" method="post">
-                    @csrf
 
 
-                    <div class="mb-1 pt-0 w-full">
-                        <label for="" class="text-blueGray-600 text-base font-medium">Pakan</label>
-                        <select name="kode_alternatif" id="" class="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring w-full">
-                            @foreach ($pakans as $pakan)
-                            <option value="{{ $pakan->kode_alternatif }},{{$pakan->jenis_pakan}}">{{ $pakan->kode_alternatif }} - {{ $pakan->jenis_pakan }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-1">
-                        @foreach ($kriterias as $kriteria)
-                        <div class="mb-1 pt-0 w-full">
-                            <label for="" class="text-blueGray-600 text-base font-medium">{{$kriteria->nama_kriteria}}</label>
-                            <select name="kode_kriteria[]" id="" class="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring w-full">
-                                <option value="">Pilih Subkriteria</option>
-                                @foreach ($kriteria->bobots as $bobot)
-                                <option value="{{ $bobot->bobot }}">{{ $bobot->nama_sub_kriteria }} - {{ $bobot->bobot }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @endforeach
-                    </div>
-
-
-
-
-                    <!--footer-->
-                    <div class="flex items-center justify-end pt-3 border-t border-solid border-blueGray-200 rounded-b">
-                        <button class="text-gray-500 background-transparent font-bold  px-6 py-2 text-base outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onclick="toggleModal('modal-id')">
-                            Close
-                        </button>
-                        <button type="submit" class="focus:ring-2  mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-primary hover:bg-primary focus:outline-none rounded">
-                            <p class="text-base font-semibold leading-none text-white">Simpan Data</p>
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-@if(sizeof($penilaians) > 2)
-<div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal-id2">
-    <div class="relative w-auto my-6 mx-auto max-w-3xl">
-        <!--content-->
-        <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-            <!--header-->
-            <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                <h3 class="text-2xl font-semibold">
-                    Ranking
-                </h3>
-                <button class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onclick="toggleModal2('modal-id2')">
-                    <span class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                        ×
-                    </span>
-                </button>
-            </div>
-            <!--body-->
-            <div class="relative p-6 flex-auto">
-                <form action="{{ route('penilaian.store') }}" class="flex flex-col w-full gap-1" method="post">
-                    @csrf
-                    <table class="display w-full example" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Alternatif Pakan</th>
-                                <th>Nilai</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                            $i = 1;
-                            @endphp
-
-                            @foreach ($rankAlternatives as $kode_alternatif => $value)
-                            <tr class="data-consume">
-                                <td>{{ $i }}</td>
-                                <td>
-                                    @foreach ($penilaians as $penilaian)
-                                    @if ($penilaian['kode_alternatif'] == $kode_alternatif)
-                                    {{ $penilaian['jenis_pakan'] }}
-                                    @endif
-                                    @endforeach
-                                </td>
-                                <td>{{$value}}</td>
-
-                            </tr>
-                            @php
-                            $i++;
-                            @endphp
-                            @endforeach
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>No</th>
-                                <th>Alternatif Pakan</th>
-                                <th>Nilai</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <!--footer-->
-                    <div class="flex items-center justify-end pt-3 border-t border-solid border-blueGray-200 rounded-b">
-                        <button type="button" onclick="toggleModal2('modal-id2')" class="focus:ring-2  mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-primary hover:bg-primary focus:outline-none rounded">
-                            <p class="text-base font-semibold leading-none text-white">Close</p>
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-@endif
-
-<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-id-backdrop"></div>
-<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-id2-backdrop"></div>
-
-<script type="text/javascript">
-    function toggleModal(modalID) {
-        document.getElementById(modalID).classList.toggle("hidden");
-        document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
-        document.getElementById(modalID).classList.toggle("flex");
-        document.getElementById(modalID + "-backdrop").classList.toggle("flex");
-    }
-
-    function toggleModal2(modalID) {
-        document.getElementById(modalID).classList.toggle("hidden");
-        document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
-        document.getElementById(modalID).classList.toggle("flex");
-        document.getElementById(modalID + "-backdrop").classList.toggle("flex");
-    }
-</script>
 @endsection
