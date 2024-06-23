@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class PenilaianController extends Controller
 {
     protected $weightCriteria = [
-        0.2, 0.1, 0.1, 0.2, 0.1, 0.1, 0.2
+        0.4, 0.2, 0.05, 0.2, 0.05, 0.05, 0.05
     ];
 
     // Langkah 0 : Generate Matrix Alternatif yang dipilih
