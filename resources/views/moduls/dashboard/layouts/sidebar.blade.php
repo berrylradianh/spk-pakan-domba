@@ -1,6 +1,3 @@
-@php
-$role_id = auth()->user()->role_id;
-@endphp
 
 <aside class="flex flex-col w-3/12 bg-white shadow-md rounded-l-3xl items-center left-0 @if($active != 'Dashboard' && $data >= 2) h-auto @else h-screen @endif z-20 px-3">
     <div class="fixed w-[150px]">

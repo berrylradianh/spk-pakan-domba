@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Kriteria;
 use App\Models\Pakan;
-use App\Models\Penilaian;
+use App\Models\PenilaianUser;
 use Illuminate\Http\Request;
 
-class PenilaianController extends Controller
+class PenilaianUserController extends Controller
 {
     protected $weightCriteria = [
         0.4,
@@ -114,6 +114,7 @@ class PenilaianController extends Controller
             $closenessCoefficient[$key] = $distanceNeg / ($distancePos + $distanceNeg);
         }
 
+        // Sort the closeness coefficients in descending order
         arsort($closenessCoefficient);
 
         return $closenessCoefficient;
@@ -132,10 +133,33 @@ class PenilaianController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    private function sortValue($preferenceValues)
+    {
+        // Create an array with alternatives and their corresponding preference values
+        $rankedAlternatives = [];
+        foreach ($preferenceValues as $alternative => $preferenceValue) {
+            $rankedAlternatives[] = ['alternative' => $alternative, 'preferenceValue' => $preferenceValue];
+        }
+
+        // Sort the array by preference value in descending order
+        usort($rankedAlternatives, function ($a, $b) {
+            return $b['preferenceValue'] <=> $a['preferenceValue'];
+        });
+
+        // Assign ranks
+        foreach ($rankedAlternatives as $index => $alternative) {
+            $rankedAlternatives[$index]['rank'] = $index + 1;
+        }
+
+        return $rankedAlternatives;
+    }
+
+
     public function index()
     {
-        $penilaians = Penilaian::all();
-        if (Penilaian::count() > 2) {
+        $penilaians = PenilaianUser::all();
+        if (PenilaianUser::count() > 2) {
             $alternatives = $this->generateAlternatives($penilaians);
             $normalizedMatrix = $this->normalizeMatrix($alternatives);
             $weightedNormalizedMatrix = $this->weightedNormalizedMatrix($normalizedMatrix, $this->weightCriteria);
@@ -149,34 +173,34 @@ class PenilaianController extends Controller
 
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
-            return view('moduls.dashboard.penilaian', compact('penilaians', 'pakans', 'kriterias', 'alternatives', 'normalizedMatrix', 'weightedNormalizedMatrix', 'idealPositive', 'idealNegative', 'distancesPositive', 'distancesNegative', 'preferenceValues', 'rankAlternatives'));
+            return view('moduls.dashboard.penilaian.manual', compact('penilaians', 'pakans', 'kriterias', 'alternatives', 'normalizedMatrix', 'weightedNormalizedMatrix', 'idealPositive', 'idealNegative', 'distancesPositive', 'distancesNegative', 'preferenceValues', 'rankAlternatives'));
         } else {
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
-            return view('moduls.dashboard.penilaian', compact('penilaians', 'pakans', 'kriterias', ));
+            return view('moduls.dashboard.penilaian.manual', compact('penilaians', 'pakans', 'kriterias', ));
         }
     }
 
 
     public function user()
     {
-        $penilaians = Penilaian::all();
+        $penilaians = PenilaianUser::all();
 
         if ($penilaians->count() > 1) {
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
-            return view('moduls.user.penilaian', compact('penilaians', 'pakans', 'kriterias'));
+            return view('moduls.user.penilaian.manual', compact('penilaians', 'pakans', 'kriterias'));
         } else {
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
-            return view('moduls.user.penilaian', compact('penilaians', 'pakans', 'kriterias'));
+            return view('moduls.user.penilaian.manual', compact('penilaians', 'pakans', 'kriterias'));
         }
     }
 
     public function generateRanking(Request $request)
     {
         $selectedPenilaianIds = $request->input('selected_penilaians', []);
-        $penilaians = Penilaian::whereIn('id', $selectedPenilaianIds)->get();
+        $penilaians = PenilaianUser::whereIn('id', $selectedPenilaianIds)->get();
 
         if ($penilaians->count() > 1) {
             $alternatives = $this->generateAlternatives($penilaians);
@@ -217,7 +241,7 @@ class PenilaianController extends Controller
         $combinedValue = $request->input('kode_alternatif');
         list($kode_alternatif, $jenis_pakan) = explode(',', $combinedValue);
 
-        $penilaian = new Penilaian();
+        $penilaian = new PenilaianUser();
         $penilaian->kode_alternatif = $kode_alternatif;
         $penilaian->jenis_pakan = $jenis_pakan;
 
@@ -228,7 +252,7 @@ class PenilaianController extends Controller
 
         toast('Alternatif penilaian baru telah ditambahkan!', 'success');
 
-        return redirect()->route('penilaian');
+        return redirect()->route('penilaian.user');
     }
 
     /**
@@ -260,11 +284,11 @@ class PenilaianController extends Controller
      */
     public function destroy(Request $request)
     {
-        $penilaian = Penilaian::findOrFail($request->id);
+        $penilaian = PenilaianUser::findOrFail($request->id);
         $penilaian->delete();
 
         toast('Alternatif penilaian berhasil dihapuskan!', 'success');
 
-        return redirect()->route('penilaian');
+        return redirect()->route('penilaian.user');
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\PakanController;
 use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\PenilaianUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,6 +52,11 @@ Route::post('/penilaian/destroy', [PenilaianController::class, 'destroy'])->name
 Route::get('/penilaian/user', [PenilaianController::class, 'user'])->name('user');
 Route::post('/penilaian/generate-ranking', [PenilaianController::class, 'generateRanking'])->name('generateRanking');
 
+Route::get('/penilaian/user/manual', [PenilaianUserController::class, 'index'])->name('penilaian.user');
+Route::post('/penilaian/user/store', [PenilaianUserController::class, 'store'])->name('penilaian.user.store');
+Route::post('/penilaian/user/destroy', [PenilaianUserController::class, 'destroy'])->name('penilaian.user.destroy');
+Route::get('/penilaian/user/user', [PenilaianUserController::class, 'user'])->name('user.user');
+Route::post('/penilaian/user/generate-ranking', [PenilaianUserController::class, 'generateRanking'])->name('generateRanking.user');
 
 Route::post('/login', [DashboardController::class, 'login'])->name('process.login');
 
