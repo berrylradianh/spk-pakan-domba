@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kriteria;
 use App\Models\Pakan;
+use App\Models\Penilaian;
 use App\Models\PenilaianUser;
 use Illuminate\Http\Request;
 
@@ -177,7 +178,7 @@ class PenilaianUserController extends Controller
         } else {
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
-            return view('moduls.dashboard.penilaian.manual', compact('penilaians', 'pakans', 'kriterias', ));
+            return view('moduls.dashboard.penilaian.manual', compact('penilaians', 'pakans', 'kriterias',));
         }
     }
 
@@ -200,7 +201,18 @@ class PenilaianUserController extends Controller
     public function generateRanking(Request $request)
     {
         $selectedPenilaianIds = $request->input('selected_penilaians', []);
+        // $selectedPenilaianUserIds = $request->input('selected_penilaian_users', []);
+        // $penilaians = [];
         $penilaians = PenilaianUser::whereIn('id', $selectedPenilaianIds)->get();
+        // $penilaian_users = Penilaian::whereIn('id', $selectedPenilaianIds)->get();
+        // dd($penilaian_users);
+
+        // Convert the collections to arrays if they are not already
+        // $penilaian_admins_array = $penilaian_admins->toArray();
+        // $penilaian_users_array = $penilaian_users->toArray();
+
+        // Merge the arrays into the $penilaians array
+        // $penilaians = array_merge($penilaian_admins_array, $penilaian_users_array);
 
         if ($penilaians->count() > 1) {
             $alternatives = $this->generateAlternatives($penilaians);
@@ -238,8 +250,21 @@ class PenilaianUserController extends Controller
      */
     public function store(Request $request)
     {
-        $combinedValue = $request->input('kode_alternatif');
-        list($kode_alternatif, $jenis_pakan) = explode(',', $combinedValue);
+        $kode_alternatif = $request->input('kode_alternatif');
+        $jenis_pakan = $request->input('jenis_pakan');
+        // list($kode_alternatif, $jenis_pakan) = explode(',', $combinedValue);
+
+        $kode_exist = PenilaianUser::where('kode_alternatif', $kode_alternatif)->first();
+        if ($kode_exist) {
+            toast('Kode Alternatif sudah dipakai !', 'error');
+            return redirect()->route('penilaian.user');
+        }
+
+        $kode_pakan_exist = Pakan::where('kode_alternatif', $kode_alternatif)->first();
+        if ($kode_pakan_exist) {
+            toast('Kode Alternatif sudah dipakai !', 'error');
+            return redirect()->route('penilaian.user');
+        }
 
         $penilaian = new PenilaianUser();
         $penilaian->kode_alternatif = $kode_alternatif;

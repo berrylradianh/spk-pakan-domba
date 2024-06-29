@@ -29,6 +29,12 @@ class PakanController extends Controller
      */
     public function store(Request $request)
     {
+        $kode_exist = Pakan::where('kode_alternatif', $request->kode_alternatif)->first();
+        if ($kode_exist) {
+            toast('Kode Alternatif sudah dipakai !', 'error');
+            return redirect()->route('pakan');
+        }
+
         $pakan = new Pakan();
         $pakan->kode_alternatif = $request->kode_alternatif;
         $pakan->jenis_pakan = $request->jenis_pakan;

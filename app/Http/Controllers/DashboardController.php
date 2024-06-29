@@ -35,7 +35,11 @@ class DashboardController extends Controller
             $user = Auth::user();
             $role = $user->role_id == 1 ? 'admin' : 'user';
             toast('Selamat datang, ' . $user->name . '! Anda berhasil login sebagai ' . ucfirst($role) . '.', 'success');
-            return redirect()->route('dashboard');
+            if ($user->role_id == 1) {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('user');
+            }
         }
 
         // Authentication failed

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kriteria;
 use App\Models\Pakan;
 use App\Models\Penilaian;
+use App\Models\PenilaianUser;
 use Illuminate\Http\Request;
 
 class PenilaianController extends Controller
@@ -129,6 +130,27 @@ class PenilaianController extends Controller
         return $preferenceValues;
     }
 
+    //fungsi ranking
+    function getRank($preferenceValues)
+    {
+        // Sort the array in descending order by value
+        arsort($preferenceValues);
+
+        // Initialize rank counter
+        $rank = 1;
+
+        // Create an array to store the ranked alternatives
+        $rankedAlternatives = [];
+
+        // Assign ranks to the alternatives
+        foreach ($preferenceValues as $alternative => $value) {
+            $rankedAlternatives[$alternative] = $rank;
+            $rank++;
+        }
+
+        return $rankedAlternatives;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -145,7 +167,9 @@ class PenilaianController extends Controller
             list($distancesPositive, $distancesNegative) = $this->calculateDistances($weightedNormalizedMatrix, $idealPositive, $idealNegative);
 
             $preferenceValues = $this->preferenceValues($distancesPositive, $distancesNegative);
+            // dd($preferenceValues);
             $rankAlternatives = $this->rankAlternatives($preferenceValues);
+            // $ranks = $this->getRank($preferenceValues);
 
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
@@ -153,7 +177,7 @@ class PenilaianController extends Controller
         } else {
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
-            return view('moduls.dashboard.penilaian', compact('penilaians', 'pakans', 'kriterias', ));
+            return view('moduls.dashboard.penilaian', compact('penilaians', 'pakans', 'kriterias',));
         }
     }
 
@@ -161,25 +185,42 @@ class PenilaianController extends Controller
     public function user()
     {
         $penilaians = Penilaian::all();
+        $penilaian_users = PenilaianUser::all();
 
         if ($penilaians->count() > 1) {
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
-            return view('moduls.user.penilaian', compact('penilaians', 'pakans', 'kriterias'));
+            return view('moduls.user.penilaian', compact('penilaians', 'pakans', 'kriterias', 'penilaian_users'));
         } else {
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
-            return view('moduls.user.penilaian', compact('penilaians', 'pakans', 'kriterias'));
+            return view('moduls.user.penilaian', compact('penilaians', 'pakans', 'kriterias', 'penilaian_users'));
         }
     }
 
     public function generateRanking(Request $request)
     {
         $selectedPenilaianIds = $request->input('selected_penilaians', []);
-        $penilaians = Penilaian::whereIn('id', $selectedPenilaianIds)->get();
+        $selectedPenilaianUserIds = $request->input('selected_penilaian_users', []);
+        // $penilaians = [];
+        $penilaian_admins = Penilaian::whereIn('id', $selectedPenilaianIds)->get();
+        $penilaian_admins = $penilaian_admins->map(function ($item) {
+            $item->penilaian_from = 'admin';
+
+            return $item;
+        });
+        $penilaian_users = PenilaianUser::whereIn('id', $selectedPenilaianUserIds)->get();
+        $penilaian_users = $penilaian_users->map(function ($item) {
+            $item->penilaian_from = 'user';
+
+            return $item;
+        });
+
+        $penilaians = $penilaian_admins->merge($penilaian_users);
 
         if ($penilaians->count() > 1) {
             $alternatives = $this->generateAlternatives($penilaians);
+            // dd($alternatives);
             $normalizedMatrix = $this->normalizeMatrix($alternatives);
             $weightedNormalizedMatrix = $this->weightedNormalizedMatrix($normalizedMatrix, $this->weightCriteria);
 
@@ -189,6 +230,8 @@ class PenilaianController extends Controller
 
             $preferenceValues = $this->preferenceValues($distancesPositive, $distancesNegative);
             $rankAlternatives = $this->rankAlternatives($preferenceValues);
+            // $ranks = $this->getRank($rankAlternatives);
+            // dd($ranks);
 
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
