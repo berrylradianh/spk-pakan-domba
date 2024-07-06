@@ -72,3 +72,6 @@ Route::post('/bobot/update/{id}', [BobotController::class, 'update'])->name('bob
 
 Route::get('/pakan/edit/{id}', [PakanController::class, 'edit'])->name('pakan.edit');
 Route::post('/pakan/update/{id}', [PakanController::class, 'update'])->name('pakan.update');
+
+Route::get('/penilaian/edit/{id}', [PenilaianController::class, 'edit'])->name('penilaian.edit');
+Route::post('/penilaian/update/{id}', [PenilaianController::class, 'update'])->name('penilaian.update');
