@@ -63,3 +63,7 @@ Route::middleware(['web', 'auth'])->group(function () {
 Route::post('/login', [DashboardController::class, 'login'])->name('process.login');
 
 Route::post('/logout', [DashboardController::class, 'logout'])->name('process.logout');
+
+Route::get('/kriteria/edit/{id}', [KriteriaController::class, 'edit'])->name('kriteria.edit');
+Route::post('/kriteria/update/{id}', [KriteriaController::class, 'update'])->name('kriteria.update');
+

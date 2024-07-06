@@ -17,7 +17,7 @@
                     <div class="flex flex-col gap-1">
                         <p tabindex="0" class="focus:outline-none text-base sm:text-lg md:text-2xl lg:text-3xl font-bold leading-normal text-gray-800 mt-1">
                             KRITERIA</p>
-                            <p class="text-gray-400 max-w-2xl">&nbsp;</p>
+                        <p class="text-gray-400 max-w-2xl">&nbsp;</p>
                         <!-- <p class="text-gray-400 max-w-2xl">Kriteria
                             Menilai kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik pakan untuk optimalkan pemeliharaan domba.</p> -->
                         <div class="sm:flex items-center justify-start gap-2">
@@ -52,8 +52,7 @@
                                 <td>{{ $kriteria['nama_kriteria'] }}</td>
                                 <td>{{ $kriteria['keterangan'] }}</td>
                                 <td class="flex gap-2">
-                                    <a href="/dashboard/consume/edit/{{ $kriteria['id'] }}" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start p-3 bg-primary hover:bg-primary focus:outline-none rounded"><i class='bx bxs-edit-alt text-white'></i>
-                                    </a>
+                                    <a href="{{ route('kriteria.edit', $kriteria['id']) }}" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start p-3 bg-primary hover:bg-primary focus:outline-none rounded"><i class='bx bxs-edit-alt text-white'></i></a>
                                     <form action="{{ route('kriteria.destroy') }}" method="post">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $kriteria['id'] }}">
@@ -61,7 +60,6 @@
                                             <i class='bx bxs-trash-alt text-white'></i>
                                         </button>
                                     </form>
-
                                 </td>
                             </tr>
                             @php

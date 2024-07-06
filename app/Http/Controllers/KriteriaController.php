@@ -51,17 +51,27 @@ class KriteriaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $kriteria = Kriteria::findOrFail($id);
+        $kriterias = Kriteria::all(); // Add this line to pass $kriterias to the view
+        return view('moduls.dashboard.kriteria_edit', compact('kriteria', 'kriterias'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $kriteria = Kriteria::findOrFail($id);
+        $kriteria->kode_kriteria = $request->kode_kriteria;
+        $kriteria->nama_kriteria = $request->nama_kriteria;
+        $kriteria->keterangan = $request->keterangan;
+        $kriteria->save();
+
+        toast('Data kriteria telah diperbarui!', 'success');
+
+        return redirect()->route('kriteria');
     }
 
     /**
