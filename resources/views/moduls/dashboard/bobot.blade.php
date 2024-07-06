@@ -14,7 +14,7 @@
                     <div class="flex flex-col gap-1">
                         <p tabindex="0" class="focus:outline-none text-base sm:text-lg md:text-2xl lg:text-3xl font-bold leading-normal text-gray-800 mt-1">
                             BOBOT</p>
-                            <p class="text-gray-400 max-w-2xl">&nbsp;</p>
+                        <p class="text-gray-400 max-w-2xl">&nbsp;</p>
                         <!-- <p class="text-gray-400 max-w-2xl">Bobot
                             Menentukan prioritas pada kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik pakan domba.</p> -->
                         <div class="sm:flex items-center justify-start gap-2">
@@ -54,7 +54,7 @@
                                 <td>{{ $bobot['nama_sub_kriteria'] }}</td>
                                 <td>{{ $bobot['bobot'] }}</td>
                                 <td class="flex gap-2">
-                                    <a href="/dashboard/consume/edit/{{ $bobot['id'] }}" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start p-3 bg-primary hover:bg-primary focus:outline-none rounded"><i class='bx bxs-edit-alt text-white'></i>
+                                    <a href="{{ route('bobot.edit', $bobot['id']) }}" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start p-3 bg-primary hover:bg-primary focus:outline-none rounded"><i class='bx bxs-edit-alt text-white'></i>
                                     </a>
                                     <form action="{{ route('bobot.destroy') }}" method="post">
                                         @csrf

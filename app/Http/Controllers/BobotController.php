@@ -55,7 +55,11 @@ class BobotController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $bobot = Bobot::findOrFail($id);
+        $kriterias = Kriteria::all();
+        $bobots = Bobot::all();
+
+        return view('moduls.dashboard.bobot_edit', compact('bobot', 'kriterias', 'bobots'));
     }
 
     /**
@@ -63,9 +67,16 @@ class BobotController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        $bobot = Bobot::findOrFail($id);
+        $bobot->kode_kriteria = $request->kode_kriteria;
+        $bobot->nama_sub_kriteria = $request->nama_sub_kriteria;
+        $bobot->bobot = $request->bobot;
+        $bobot->save();
 
+        toast('Data bobot berhasil diperbarui!', 'success');
+
+        return redirect()->route('bobot');
+    }
     /**
      * Remove the specified resource from storage.
      */

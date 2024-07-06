@@ -67,3 +67,5 @@ Route::post('/logout', [DashboardController::class, 'logout'])->name('process.lo
 Route::get('/kriteria/edit/{id}', [KriteriaController::class, 'edit'])->name('kriteria.edit');
 Route::post('/kriteria/update/{id}', [KriteriaController::class, 'update'])->name('kriteria.update');
 
+Route::get('/bobot/edit/{id}', [BobotController::class, 'edit'])->name('bobot.edit');
+Route::post('/bobot/update/{id}', [BobotController::class, 'update'])->name('bobot.update');
