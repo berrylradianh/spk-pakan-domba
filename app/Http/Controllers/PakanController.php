@@ -58,15 +58,37 @@ class PakanController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $pakan = Pakan::findOrFail($id);
+        $pakans = Pakan::all();
+        return view('moduls.dashboard.pakan_edit', compact('pakan', 'pakans'));
     }
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $pakan = Pakan::findOrFail($id);
+
+        $request->validate([
+            'kode_alternatif' => 'required|string|max:255',
+            'jenis_pakan' => 'required|string|max:255',
+        ]);
+
+        $kode_exist = Pakan::where('kode_alternatif', $request->kode_alternatif)
+                           ->where('id', '!=', $id)
+                           ->first();
+        if ($kode_exist) {
+            toast('Kode Alternatif sudah dipakai !', 'error');
+            return redirect()->route('pakan.edit', $id);
+        }
+
+        $pakan->kode_alternatif = $request->kode_alternatif;
+        $pakan->jenis_pakan = $request->jenis_pakan;
+        $pakan->save();
+
+        toast('Data pakan berhasil diperbarui!', 'success');
+
+        return redirect()->route('pakan');
     }
 
     /**

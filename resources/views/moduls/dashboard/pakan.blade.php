@@ -14,7 +14,7 @@
                     <div class="flex flex-col gap-1">
                         <p tabindex="0" class="focus:outline-none text-base sm:text-lg md:text-2xl lg:text-3xl font-bold leading-normal text-gray-800 mt-2">
                             PAKAN</p>
-                            <p class="text-gray-400 max-w-2xl">&nbsp;</p>
+                        <p class="text-gray-400 max-w-2xl">&nbsp;</p>
                         <!-- <p class="text-gray-400 max-w-2xl">Pakan
                             Memilih pakan berkualitas berdasarkan kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik domba.</p> -->
                         <div class="sm:flex items-center justify-start gap-2">
@@ -47,16 +47,16 @@
                                 <td>{{ $pakan['kode_alternatif'] }}</td>
                                 <td>{{ $pakan['jenis_pakan'] }}</td>
                                 <td class="flex gap-2">
-                                    <a href="/dashboard/consume/edit/{{ $pakan['id'] }}" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start p-3 bg-primary hover:bg-primary focus:outline-none rounded"><i class='bx bxs-edit-alt text-white'></i>
+                                    <a href="{{ route('pakan.edit', $pakan->id) }}" class="focus:ring-2 focus:ring-offset-2 mt-4 sm:mt-0 inline-flex items-start justify-start p-3 bg-primary hover:bg-primary focus:outline-none rounded">
+                                        <i class='bx bxs-edit-alt text-white'></i>
                                     </a>
                                     <form action="{{ route('pakan.destroy') }}" method="post">
                                         @csrf
-                                        <input type="hidden" name="id" value="{{ $pakan['id'] }}">
-                                        <button type="submit" class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start p-3 bg-red-500 hover:bg-red-500 focus:outline-none rounded">
+                                        <input type="hidden" name="id" value="{{ $pakan->id }}">
+                                        <button type="submit" class="focus:ring-2 focus:ring-offset-2 mt-4 sm:mt-0 inline-flex items-start justify-start p-3 bg-red-500 hover:bg-red-500 focus:outline-none rounded">
                                             <i class='bx bxs-trash-alt text-white'></i>
                                         </button>
                                     </form>
-
                                 </td>
                             </tr>
                             @php

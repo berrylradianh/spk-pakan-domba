@@ -69,3 +69,6 @@ Route::post('/kriteria/update/{id}', [KriteriaController::class, 'update'])->nam
 
 Route::get('/bobot/edit/{id}', [BobotController::class, 'edit'])->name('bobot.edit');
 Route::post('/bobot/update/{id}', [BobotController::class, 'update'])->name('bobot.update');
+
+Route::get('/pakan/edit/{id}', [PakanController::class, 'edit'])->name('pakan.edit');
+Route::post('/pakan/update/{id}', [PakanController::class, 'update'])->name('pakan.update');
