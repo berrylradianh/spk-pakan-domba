@@ -291,18 +291,32 @@ class PenilaianUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $penilaian = PenilaianUser::findOrFail($id);
+        $pakans = Pakan::all();
+        $kriterias = Kriteria::with('bobots')->get();
+        return view('moduls.dashboard.penilaian.manual', compact('penilaian', 'pakans', 'kriterias'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $penilaian = PenilaianUser::findOrFail($id);
+
+        $penilaian->kode_alternatif = $request->input('kode_alternatif');
+        $penilaian->jenis_pakan = $request->input('jenis_pakan');
+
+        $penilaian->save();
+
+        toast('Alternatif penilaian berhasil diperbarui!', 'success');
+
+        return redirect()->route('penilaian.user');
     }
+
 
     /**
      * Remove the specified resource from storage.

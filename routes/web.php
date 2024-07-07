@@ -75,3 +75,5 @@ Route::post('/pakan/update/{id}', [PakanController::class, 'update'])->name('pak
 
 Route::get('/penilaian/edit/{id}', [PenilaianController::class, 'edit'])->name('penilaian.edit');
 Route::post('/penilaian/update/{id}', [PenilaianController::class, 'update'])->name('penilaian.update');
+
+Route::post('/penilaian/user/update/{id}', [PenilaianUserController::class, 'update'])->name('penilaian.user.update');
